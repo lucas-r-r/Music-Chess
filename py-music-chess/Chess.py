@@ -32,8 +32,7 @@ FEN_to_piece_type = {'1': ['blank space', 'blank space'],
 
 
 
-def is_legal_move():
-    pass
+
 
 def print_illegal_move(cause):
     print(f"Illegal move: {cause}")
@@ -530,6 +529,17 @@ def assign_piece(piece, position):
 
 
 class Game():
+    def __init__(self):
+        #Create players
+        self.white = Player('white', 0, self)
+        self.black = Player('black', 6, self)
+        self.turn = self.white
+        self.half_move = 0
+        self.move = 1
+        self.chessboard = [[Square([i, j]) for j in range(8)] for i in range(8)] #rever como se fan os putos geradores!!!
+        self.en_passant = None
+        self.promotion_choice = 0
+
     def init_game(self, FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"):
         Piece.list_of_pieces = []
         self.white.list_of_pieces = []
@@ -620,24 +630,15 @@ class Game():
                 elif i =="q":
                     self.black.the_King.has_moved = False
                     self.black.the_Rook_Q.has_moved = False
-                else:
+
                     raise Exception("Not a valid character in castling status")
         print(self.game_state_to_FEN())
-
+    def is_legal_move():
+        pass
     def get_relative_rank(self, y, color):
         if color == self.white:
             y = abs(y-7)
         return y
-    def __init__(self):
-        #Create players
-        self.white = Player('white', 0, self)
-        self.black = Player('black', 6, self)
-        self.turn = self.white
-        self.half_move = 0
-        self.move = 1
-        self.chessboard = [[Square([i, j]) for j in range(8)] for i in range(8)] #rever como se fan os putos geradores!!!
-        self.en_passant = None
-        self.promotion_choice = 0
 
     def get_opponent(self, color):
         if color == self.white:
