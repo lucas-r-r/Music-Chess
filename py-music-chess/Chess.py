@@ -179,14 +179,11 @@ class Piece():
 
 
 class King(Piece):
-
+    name = 'King'
+    symbol = '♔'
+    letter = "K"
+    value = 0
     def __init__(self, color, position):
-        #all init should go to class variable
-        self.name = 'King'
-        self.symbol = '♔'
-        self.letter = "K"
-        self.value = 0
-
         super().__init__(color, position)
         self.color.the_King = self
     def movement_eval(self, dest_position):
@@ -223,12 +220,10 @@ class King(Piece):
 
 
 class Queen(Piece):
-    def __init__(self, color, position):
-        self.name = 'Queen'
-        self.symbol = '♕'
-        self.letter = 'Q'
-        self.value = 9
-        super().__init__(color, position)
+    name = 'Queen'
+    symbol = '♕'
+    letter = 'Q'
+    value = 9
     def movement_eval(self, dest_position):
         if Rook.movement_eval(self, dest_position)[0] == True:
             print("Queen moved horizontally")
@@ -240,11 +235,12 @@ class Queen(Piece):
         else:
             return [False]
 class Rook(Piece):
+    name = 'Rook'
+    symbol = '♖'
+    letter = 'R'
+    value = 5
     def __init__(self, color, position):
-        self.name = 'Rook'
-        self.symbol = '♖'
-        self.letter = 'R'
-        self.value = 5
+
         super().__init__(color, position)
         if self.position[0] == 0:
             self.color.the_Rook_Q = self
@@ -306,12 +302,11 @@ class Rook(Piece):
         return [True, None]
 
 class Bishop(Piece):
-    def __init__(self, color, position):
-        self.name = 'Bishop'
-        self.symbol = '♗'
-        self.letter = 'B'
-        self.value = 3
-        super().__init__(color, position)
+    name = 'Bishop'
+    symbol = '♗'
+    letter = 'B'
+    value = 3
+
     def movement_eval(self, dest_position):
         def are_pieces_on_the_way():
             delta = abs(dx - ox)
@@ -357,12 +352,11 @@ class Bishop(Piece):
             return [True, None]
 
 class Knight(Piece):
-    def __init__(self, color, position):
-        self.name = 'Knight'
-        self.symbol = '♘'
-        self.letter = 'N'
-        self.value = 3
-        super().__init__(color, position)
+    name = 'Knight'
+    symbol = '♘'
+    letter = 'N'
+    value = 3
+
     def movement_eval(self, dest_position):
         ox = self.position[0]
         oy = self.position[1]
@@ -812,8 +806,8 @@ if __name__ == "__main__":
     a_game.init_game()
     playing = True #This is going to create the loop in a While statement until the user quits
     #Test some pieces integrity
-    x = 7
-    y = 7
+    x = 6
+    y = 6
     the_piece = a_game.chessboard[x][y].get_piece()
 
     print(f"Piece in {x}, {y} is a {the_piece.name}")
