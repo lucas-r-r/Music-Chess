@@ -805,4 +805,4 @@ class Game():
 a_game = Game() #Decide wether this is going to be in the module as singleton or not
 
 if __name__ == "__main__":
-    pass
+    a_game.init_game()
