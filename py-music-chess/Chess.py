@@ -131,17 +131,17 @@ class Piece():
     def do_move(self, dest_position, special):
         destination_piece = a_game.chessboard[dest_position[0]][dest_position[1]].get_piece()
         if destination_piece != None:
-            capture(dest_position)
+            a_game.capture(dest_position)
         if special[0] == "en passant":
             a_game.en_passant = special[1]
         else:
             if special[0] == "capture en passant":
                 if a_game.en_passant[1] == 2:
                     print("capturing en passant a black pawn")
-                    capture([dest_position[0],3])
+                    a_game.capture([dest_position[0],3])
                 elif a_game.en_passant[1] == 6:
                     print("capturing en passant a white pawn")
-                    capture([dest_position[0],4])
+                    a_game.capture([dest_position[0],4])
                 else:
                     raise Exception("There's no valid en passant 'y' coordinate stored in memory")
             elif special[0] == "Castling kingside":
@@ -163,7 +163,7 @@ class Piece():
             print("Erasing en passant information")
             a_game.en_passant = None
         # if a_game.chessboard[dest_position[0]][dest_position[1]].get_piece():
-        #     capture(dest_position)
+        #     self.capture(dest_position)
 
         self.position = dest_position
         self.has_moved = True
@@ -837,12 +837,6 @@ a_game = Game() #Decide wether this is going to be in the module as singleton or
 if __name__ == "__main__":
     a_game.init_game()
     playing = True #This is going to create the loop in a While statement until the user quits
-    #Test some pieces integrity
-    x = 6
-    y = 6
-    the_piece = a_game.chessboard[x][y].get_piece()
-
-    print(f"Piece in {x}, {y} is a {the_piece.name}")
     a_game.print_chessboard()
     while playing:
 
