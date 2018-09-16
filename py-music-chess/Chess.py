@@ -39,10 +39,7 @@ FEN_to_piece_type = {'1': ['blank space', 'blank space'],
 def print_illegal_move(cause):
     print(f"Illegal move: {cause}")
 
-def capture(position):
-    """Eliminates piece in destination"""
-    print(f"Piece to be captured is in {position}")
-    a_game.chessboard[position[0]][position[1]].get_piece().position = [-1, -1]
+
 
 
 def coordinate_to_number(coordinate):
@@ -632,7 +629,10 @@ class Game():
                     x.append(y)
         return x
 
-
+    def capture(position):
+        """Eliminates piece in destination"""
+        print(f"Piece to be captured is in {position}")
+        self.chessboard[position[0]][position[1]].get_piece().position = [-1, -1]
 
 
     def is_legal_move():
