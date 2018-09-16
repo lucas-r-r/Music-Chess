@@ -16,6 +16,9 @@ FEN_to_piece_type = {'1': ['blank space', 'blank space'],
                     'n': ['Knight', 'Black'],
                     'b': ['Bishop', 'Black'],
                     'p': ['Pawn', 'Black']}
+
+                    #It might be useful to take the shortcut and create the class directly with the dictionary, if that's possible.
+                    
 # Piece_to_FEN = { None: '1',
 #                 ['King', 'White']: 'K',
 #                 ['Queen', 'White']: 'Q',
