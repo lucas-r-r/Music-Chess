@@ -806,3 +806,4 @@ a_game = Game() #Decide wether this is going to be in the module as singleton or
 
 if __name__ == "__main__":
     a_game.init_game()
+    playing = True #This is going to create the loop in a While statement until the user quits
