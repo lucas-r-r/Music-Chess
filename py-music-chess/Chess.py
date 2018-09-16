@@ -618,6 +618,7 @@ class Game():
                 elif i =="q":
                     self.black.the_King.has_moved = False
                     self.black.the_Rook_Q.has_moved = False
+                else:
 
                     raise Exception("Not a valid character in castling status")
         print(self.game_state_to_FEN())
