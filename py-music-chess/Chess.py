@@ -18,7 +18,7 @@ FEN_to_piece_type = {'1': ['blank space', 'blank space'],
                     'p': ['Pawn', 'Black']}
 
                     #It might be useful to take the shortcut and create the class directly with the dictionary, if that's possible.
-                    
+
 # Piece_to_FEN = { None: '1',
 #                 ['King', 'White']: 'K',
 #                 ['Queen', 'White']: 'Q',
@@ -622,7 +622,7 @@ class Game():
                     raise Exception("Not a valid character in castling status")
         print(self.game_state_to_FEN())
 
-    def list_all_pieces():
+    def list_all_pieces(self):
         """Getting all the pieces in board"""
         x = []
         for i in range(8):
@@ -632,7 +632,24 @@ class Game():
                     x.append(y)
         return x
 
-    def capture(position):
+    def print_chessboard(self):
+        for y in range(8):
+            rowstr = ""
+            for x in range(8):
+                piece = self.chessboard[x][y].get_piece()
+                char = ""
+                if piece != None:
+                    char = piece.get_symbol()
+                else:
+                    char = "□"
+                rowstr += char
+                rowstr += " "
+
+            print(rowstr)
+
+
+
+    def capture(self, position):
         """Eliminates piece in destination"""
         print(f"Piece to be captured is in {position}")
         self.chessboard[position[0]][position[1]].get_piece().position = [-1, -1]
@@ -819,3 +836,4 @@ if __name__ == "__main__":
     the_piece = a_game.chessboard[x][y].get_piece()
 
     print(f"Piece in {x}, {y} is a {the_piece.name}")
+    a_game.print_chessboard()
