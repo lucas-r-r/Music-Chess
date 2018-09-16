@@ -18,6 +18,8 @@ FEN_to_piece_type = {'1': ['blank space', 'blank space'],
                     'p': ['Pawn', 'Black']}
 
                     #It might be useful to take the shortcut and create the class directly with the dictionary, if that's possible.
+file_to_x = {"a":0, "b":1, "c":2, "d":3, "e":4, "f":5, "g":6, "h":7}
+x_to_file = {"a", "b", "c", "d", "e", "f", "g", "h"}
 
 # Piece_to_FEN = { None: '1',
 #                 ['King', 'White']: 'K',
@@ -57,7 +59,7 @@ def coordinate_to_number(coordinate):
 def rank_to_y(rank):
     return abs(int(rank) - 8)
 
-file_to_x = {"a":0, "b":1, "c":2, "d":3, "e":4, "f":5, "g":6, "h":7}
+
 
 def substitute_FEN_numbers(FEN_coordinates):
     """Substitute the number in FEN coordinates with that number of 1s"""
@@ -634,6 +636,7 @@ class Game():
 
     def print_chessboard(self):
         for y in range(8):
+
             rowstr = ""
             for x in range(8):
                 piece = self.chessboard[x][y].get_piece()
@@ -688,6 +691,7 @@ class Game():
             self.move += 1
             self.turn = self.white
     def move_attempt(self, coordinate_orig_dest):
+        """Attempts to make a movement. Coordinates are given in the format frfr, where 'f' is the file and 'r' is the rank, and the first two characters refer to the origin square and the last two of them to the destination square"""
         origin = coordinate_to_number(coordinate_orig_dest[:2])
         print (f"Origin coordinate: {origin}")
         destination = coordinate_to_number(coordinate_orig_dest[2:])
@@ -837,3 +841,12 @@ if __name__ == "__main__":
 
     print(f"Piece in {x}, {y} is a {the_piece.name}")
     a_game.print_chessboard()
+    while playing:
+
+        move = input("Move? (type 'q' to quit)")
+        if move == 'q':
+            print("Bye!")
+            sys.exit()
+        else:
+            a_game.move_attempt(move)
+            a_game.print_chessboard()
