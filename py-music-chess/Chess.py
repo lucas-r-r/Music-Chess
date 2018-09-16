@@ -182,6 +182,7 @@ class Piece():
 class King(Piece):
 
     def __init__(self, color, position):
+        #all init should go to class variable
         self.name = 'King'
         self.symbol = '♔'
         self.letter = "K"
@@ -524,24 +525,7 @@ def assign_piece(piece, position):
     else:
         return None
 
-def list_all_pieces():
-    "Getting all the pieces in board"
-    # pieces = Piece.list_of_pieces
-    # pieces_string = ''
-    # for i in pieces:
-    #     pieces_string += i.get_symbol()
-    # return ("Pieces in board: ", pieces_string)
-    #old get_all_pieces() version
-    x = []
-    for i in range(8):
-        for j in range(8):
-            print(i, j)
-            y = a_game.chessboard[i][j].get_piece()
-            if y != None:
-                x.append(y)
-            else:
-                pass
-    return x
+
 
 
 
@@ -568,7 +552,15 @@ class Game():
             print('FEN coordinates are not correct. There aren\'t 64 squares')
             sys.exit()
 
-
+    def list_all_pieces():
+        """Getting all the pieces in board"""
+        x = []
+        for i in range(8):
+            for j in range(8):
+                y = self.chessboard[i][j].get_piece()
+                if y != None:
+                    x.append(y)
+        return x
 
 
 
@@ -810,4 +802,7 @@ class Game():
 
 
 
-a_game = Game() #pasar para OSC_server.py
+a_game = Game() #Decide wether this is going to be in the module as singleton or not
+
+if __name__ == "__main__":
+    pass
