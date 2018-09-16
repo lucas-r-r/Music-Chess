@@ -59,7 +59,8 @@ def coordinate_to_number(coordinate):
 def rank_to_y(rank):
     return abs(int(rank) - 8)
 
-
+def y_to_rank(y):
+    return abs(y-8)
 
 def substitute_FEN_numbers(FEN_coordinates):
     """Substitute the number in FEN coordinates with that number of 1s"""
@@ -637,7 +638,8 @@ class Game():
     def print_chessboard(self):
         for y in range(8):
 
-            rowstr = ""
+            rowstr = str(y_to_rank(y)) + " "
+
             for x in range(8):
                 piece = self.chessboard[x][y].get_piece()
                 char = ""
@@ -649,6 +651,7 @@ class Game():
                 rowstr += " "
 
             print(rowstr)
+        print("  a b c d e f g h")
 
 
 
