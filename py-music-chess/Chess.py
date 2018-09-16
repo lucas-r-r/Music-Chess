@@ -380,11 +380,11 @@ class Knight(Piece):
             return [False]
 
 class Pawn(Piece):
+    name = 'Pawn'
+    symbol = '♙'
+    letter = 'P'
+    value = 1
     def __init__(self, color, position):
-        self.name = 'Pawn'
-        self.symbol = '♙'
-        self.letter = 'P'
-        self.value = 1
         super().__init__(color, position)
         self.x = 1 #????
         self.has_moved = False
