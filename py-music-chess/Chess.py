@@ -1,5 +1,7 @@
 import sys
 
+verbose = false
+
 
 FEN_to_piece_type = {'1': ['blank space', 'blank space'],
                     'K': ['King', 'White'],
