@@ -1,6 +1,6 @@
 import sys
 
-verbose = false
+verbose = False
 
 
 FEN_to_piece_type = {'1': ['blank space', 'blank space'],
@@ -538,6 +538,7 @@ class Game():
         self.promotion_choice = 0
 
     def init_game(self, FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"):
+        """Initializes the game state, with a standard start as default"""
         Piece.list_of_pieces = []
         self.white.list_of_pieces = []
         self.black.list_of_pieces = []
@@ -546,7 +547,8 @@ class Game():
             pass
         print('Input FEN:', FEN)
         #slice part of coordinates
-        print('Extracting FEN coordinates...')
+        if verbose == True:
+            print('Extracting FEN coordinates...')
         turn_division = FEN.index(' ')
 
         #process the coordinates part
@@ -558,12 +560,13 @@ class Game():
         except(AssertionError):
             print('FEN coordinates are not correct. There aren\'t 64 squares')
             sys.exit()
-        print("FEN_to_piece_type dictionary defined")
+
         for j, i in enumerate(FEN_coordinates):
 
             x = j % 8
             y = j // 8
-            #print(f"FEN key to be assigned: {i}")
+            if verbose == True:
+                print(f"FEN key to be assigned: {i}")
             current_piece = assign_piece(i, [x, y])
             if current_piece == None:
                 s = 'blank'
