@@ -384,9 +384,10 @@ class Pawn(Piece):
     symbol = '♙'
     letter = 'P'
     value = 1
+    #Need to rename this to uppercase, to match conventions.
     def __init__(self, color, position):
         super().__init__(color, position)
-        self.x = 1 #????
+        self.x = 1 #???? Try to erase this and see if it breaks!
         self.has_moved = False
     def movement_eval(self, dest_position):
         #set variable names more usable
@@ -561,19 +562,6 @@ class Game():
         except(AssertionError):
             print('FEN coordinates are not correct. There aren\'t 64 squares')
             sys.exit()
-
-    def list_all_pieces():
-        """Getting all the pieces in board"""
-        x = []
-        for i in range(8):
-            for j in range(8):
-                y = self.chessboard[i][j].get_piece()
-                if y != None:
-                    x.append(y)
-        return x
-
-
-
         print("FEN_to_piece_type dictionary defined")
         for j, i in enumerate(FEN_coordinates):
 
@@ -633,6 +621,20 @@ class Game():
 
                     raise Exception("Not a valid character in castling status")
         print(self.game_state_to_FEN())
+
+    def list_all_pieces():
+        """Getting all the pieces in board"""
+        x = []
+        for i in range(8):
+            for j in range(8):
+                y = self.chessboard[i][j].get_piece()
+                if y != None:
+                    x.append(y)
+        return x
+
+
+
+
     def is_legal_move():
         pass
     def get_relative_rank(self, y, color):
@@ -808,3 +810,9 @@ a_game = Game() #Decide wether this is going to be in the module as singleton or
 if __name__ == "__main__":
     a_game.init_game()
     playing = True #This is going to create the loop in a While statement until the user quits
+    #Test some pieces integrity
+    x = 7
+    y = 7
+    the_piece = a_game.chessboard[x][y].get_piece()
+
+    print(f"Piece in {x}, {y} is a {the_piece.name}")
