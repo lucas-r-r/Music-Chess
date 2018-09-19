@@ -124,9 +124,9 @@ class Piece():
 
     def get_symbol(self):
         return chr(ord(self.symbol) + self.color.char_modifier)
-    def movement_eval(self, dest_position):
-        print("Piece type or its movement is not defined, so there's no possible movement.")
-        print("We'll asume your movement is legal")
+    def move_eval(self, dest_position):
+        print("Piece type or its move is not defined, so there's no possible move.")
+        print("We'll asume your move is legal")
         return [True, None]
     def do_move(self, dest_position, special):
         destination_piece = a_game.chessboard[dest_position[0]][dest_position[1]].get_piece()
@@ -191,7 +191,7 @@ class King(Piece):
     def __init__(self, color, position):
         super().__init__(color, position)
         self.color.the_King = self
-    def movement_eval(self, dest_position):
+    def move_eval(self, dest_position):
         def is_castling_K():
             if oy == dy and dx - ox == 2 and self.color.the_King.has_moved == False and self.color.the_Rook_K.has_moved == False:
                 return True
@@ -229,12 +229,12 @@ class Queen(Piece):
     symbol = '♕'
     letter = 'Q'
     value = 9
-    def movement_eval(self, dest_position):
-        if Rook.movement_eval(self, dest_position)[0] == True:
+    def move_eval(self, dest_position):
+        if Rook.move_eval(self, dest_position)[0] == True:
             print("Queen moved horizontally")
             return [True, None]
 
-        elif Bishop.movement_eval(self, dest_position)[0] == True:
+        elif Bishop.move_eval(self, dest_position)[0] == True:
             print("Queen moved diagonally")
             return [True, None]
         else:
@@ -251,7 +251,7 @@ class Rook(Piece):
             self.color.the_Rook_Q = self
         elif self.position[0] == 7:
             self.color.the_Rook_K = self
-    def movement_eval(self, dest_position):
+    def move_eval(self, dest_position):
         def are_pieces_on_the_way():
             if abs(delta) == 1:
                 print("Rook is only moving by one square")
@@ -264,14 +264,14 @@ class Rook(Piece):
             print(direction)
             if direction == "H":
                 for i in range(1, abs(delta)):
-                    print(f"evaluating an horizontal movement of {i} squares")
+                    print(f"evaluating an horizontal move of {i} squares")
                     piece = a_game.chessboard[ox + (i * orientation)][oy].get_piece()
                     if piece != None:
                         return True
                 return False
             elif direction == "V":
                 for i in range(1, abs(delta)):
-                    print(f"evaluating a vertical movement of {i} squares")
+                    print(f"evaluating a vertical move of {i} squares")
                     piece = a_game.chessboard[ox][oy + (i * orientation)].get_piece()
                     if piece != None:
                         return True
@@ -294,7 +294,7 @@ class Rook(Piece):
             direction = "V"
             delta = dy - oy
         else:
-            raise Exception("Movement should be either horizontal or vertical!")
+            raise Exception("move should be either horizontal or vertical!")
         print(f"number of squares the rook is displacing: {delta}")
         if are_pieces_on_the_way():
             print_illegal_move("There are pieces on the way and rook can't move")
@@ -312,11 +312,11 @@ class Bishop(Piece):
     letter = 'B'
     value = 3
 
-    def movement_eval(self, dest_position):
+    def move_eval(self, dest_position):
         def are_pieces_on_the_way():
             delta = abs(dx - ox)
 
-            #getting movement directions
+            #getting move directions
             if ox < dx:
                 orientationH = 1
             else:
@@ -362,7 +362,7 @@ class Knight(Piece):
     letter = 'N'
     value = 3
 
-    def movement_eval(self, dest_position):
+    def move_eval(self, dest_position):
         ox = self.position[0]
         oy = self.position[1]
         dx = dest_position[0]
@@ -388,7 +388,7 @@ class Pawn(Piece):
         super().__init__(color, position)
         self.x = 1 #???? Try to erase this and see if it breaks!
         self.has_moved = False
-    def movement_eval(self, dest_position):
+    def move_eval(self, dest_position):
         #set variable names more usable
         ox = self.position[0]
         oy = self.position[1]
@@ -432,7 +432,7 @@ class Pawn(Piece):
                     else:
                         return [True, None]
 
-        elif (     ((self.color == a_game.white #determine if initial movement can be done
+        elif (     ((self.color == a_game.white #determine if initial move can be done
                             and oy - 2 == dy)
                        or (self.color == a_game.black
                             and oy + 2 == dy)) #moves two squares forward
@@ -450,16 +450,16 @@ class Pawn(Piece):
                     en_passant = [dx, dy - 1]
                 else:
                     print("Error, there should be an en passant assignment")
-                print(f"initial two squares movement, en passant set to {en_passant}")
+                print(f"initial two squares move, en passant set to {en_passant}")
                 return [True, "en passant", en_passant]
             else:
-                print_illegal_move("Pawn can't perform two square initial movement because there's a piece present in destination")
+                print_illegal_move("Pawn can't perform two square initial move because there's a piece present in destination")
                 return [False]
 
         else:
-            print_illegal_move("that's not a standard pawn movement")
+            print_illegal_move("that's not a standard pawn move")
             return [False]
-        print("Movement not implemented, you shouldn't actually see this message")
+        print("move not implemented, you shouldn't actually see this message")
 class Player():
     def __init__(self, color, char_modifier, game = None):
         self.name = color
@@ -694,7 +694,7 @@ class Game():
             self.move += 1
             self.turn = self.white
     def move_attempt(self, coordinate_orig_dest):
-        """Attempts to make a movement. Coordinates are given in the format frfr, where 'f' is the file and 'r' is the rank, and the first two characters refer to the origin square and the last two of them to the destination square"""
+        """Attempts to make a move. Coordinates are given in the format frfr, where 'f' is the file and 'r' is the rank, and the first two characters refer to the origin square and the last two of them to the destination square"""
         origin = coordinate_to_number(coordinate_orig_dest[:2])
         print (f"Origin coordinate: {origin}")
         destination = coordinate_to_number(coordinate_orig_dest[2:])
@@ -713,8 +713,8 @@ class Game():
                 print(f"it's {self.turn.name} to move!")
                 return [False]
             else:
-                #This function should evaluate if the movement is pseudo-legal. It should return a list on the format of [False] or [True, special condition, special condition arguments]
-                pseudo_evaluation = origin_piece.movement_eval(destination)
+                #This function should evaluate if the move is pseudo-legal. It should return a list on the format of [False] or [True, special condition, special condition arguments]
+                pseudo_evaluation = origin_piece.move_eval(destination)
                 if pseudo_evaluation[0] == True:  #pseudo-legal move
                     special = pseudo_evaluation[1:]
                     Piece.do_move(origin_piece, destination, special)
@@ -799,7 +799,7 @@ class Game():
         FEN += "0"
 
         FEN += " "
-        #Placeholder for movement number
+        #Placeholder for move number
         FEN += "1"
         #include turn, castling, half-move, turn number
         return FEN
