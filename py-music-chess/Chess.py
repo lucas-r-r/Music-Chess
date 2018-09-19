@@ -699,7 +699,8 @@ class Game():
         print (f"Origin coordinate: {origin}")
         destination = coordinate_to_number(coordinate_orig_dest[2:])
         #destination.append(None)
-        print (f"Destination coordinate: {destination}")
+        if verbose == True:
+            print (f"Destination coordinate: {destination}")
         if origin == destination:
             print("Origin and destination are the same")
             return [False]
@@ -714,6 +715,9 @@ class Game():
                 return [False]
             else:
                 #This function should evaluate if the move is pseudo-legal. It should return a list on the format of [False] or [True, special condition, special condition arguments]
+                if is_legal_move():
+                    if is_pseudolegal_move(origin_piece):
+                        pass
                 pseudo_evaluation = origin_piece.move_eval(destination)
                 if pseudo_evaluation[0] == True:  #pseudo-legal move
                     special = pseudo_evaluation[1:]
