@@ -662,7 +662,7 @@ class Game():
         self.chessboard[position[0]][position[1]].get_piece().position = [-1, -1]
 
 
-    def is_legal_move():
+    def is_legal_move(self):
         pass
     def get_relative_rank(self, y, color):
         if color == self.white:
@@ -716,8 +716,8 @@ class Game():
                 return [False]
             else:
                 #This function should evaluate if the move is pseudo-legal. It should return a list on the format of [False] or [True, special condition, special condition arguments]
-                if is_legal_move():
-                    if is_pseudolegal_move(origin_piece):
+                if self.is_legal_move():
+                    if self.is_pseudolegal_move(origin_piece):
                         pass
                 pseudo_evaluation = origin_piece.move_eval(destination)
                 if pseudo_evaluation[0] == True:  #pseudo-legal move
