@@ -296,7 +296,7 @@ class Rook(Piece):
             delta = dy - oy
         else:
             raise Exception("move should be either horizontal or vertical!")
-        print(f"number of squares the rook is displacing: {delta}")
+        vprint(f"number of squares the rook is displacing: {delta}")
         if are_pieces_on_the_way():
             print_illegal_move("There are pieces on the way and rook can't move")
             return [False]
@@ -327,7 +327,7 @@ class Bishop(Piece):
             else:
                 orientationV = -1
 
-            print(f"Delta movement: {delta}. Orientation H: {orientationH}. Orientation V: {orientationV}")
+            vprint(f"Delta movement: {delta}. Orientation H: {orientationH}. Orientation V: {orientationV}")
             if abs(delta) == 1:
                 print("Bishop is only moving by one square")
                 return False
