@@ -130,6 +130,13 @@ class Piece():
         print("We'll asume your move is legal")
         return [True, None]
     def is_capturable(self):
+        def_player = self.color
+        off_player = self.color.the_other_player()
+        destination = def_player.the_King.position
+        for piece in off_player.list_of_pieces:
+            if piece.move_eval(destination, False)[0] == True:
+                return True
+        return False
         pass
     def do_move(self, dest_position, special): #pass this to Game()
         destination_piece = a_game.chessboard[dest_position[0]][dest_position[1]].get_piece()
@@ -674,13 +681,14 @@ class Game():
         print(f"Piece to be captured is in {position}")
         self.chessboard[position[0]][position[1]].get_piece().position = [-1, -1]
 
-    def is_king_capturable(self, def_player):
-        destination = def_player.the_King.position
-        off_player = def_player.the_other_player()
-        for piece in off_player.list_of_pieces:
-            if piece.move_eval(destination, False)[0] == True:
-                return True
-        return False
+    def is_king_capturable(self, def_player): #substitute this with is_capturable in the piece class
+        return def_player.the_King.is_capturable()
+        ## destination = def_player.the_King.position
+        ## off_player = def_player.the_other_player()
+        ## for piece in off_player.list_of_pieces:
+        ##     if piece.move_eval(destination, False)[0] == True:
+        ##         return True
+        ## return False
 
 
 
