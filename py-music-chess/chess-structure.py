@@ -11,11 +11,11 @@ class Game():
     def move_attempt():
         if is_legal() = True:
             do_move()
-    def is_king_capturable():
+    def is_king_capturable(self):
         player = turn.the_other_player()
         destination = turn.the_king.get_square()
         for piece in player.list_of_pieces:
-            if piece.move_eval(destination, special = none) == True:
+            if piece.move_eval(destination, None) == True:
                 return True
         return False
 

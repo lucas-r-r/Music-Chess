@@ -479,6 +479,15 @@ class Player():
         else:
             return False
 
+    def the_other_player(self):
+        if self == White:
+            return Black
+        elif self == Black:
+            return White
+        else:
+            raise Exception("The player does not exist")
+
+
 class Square(object):
     def __init__(self, position):
         self.position = position
