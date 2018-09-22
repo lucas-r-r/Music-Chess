@@ -125,7 +125,7 @@ class Piece():
 
     def get_symbol(self):
         return chr(ord(self.symbol) + self.color.char_modifier)
-    def move_eval(self, dest_position):
+    def move_eval(self, dest_position, turn_aware = True):
         print("Piece type or its move is not defined, so there's no possible move.")
         print("We'll asume your move is legal")
         return [True, None]
@@ -192,7 +192,7 @@ class King(Piece):
     def __init__(self, color, position):
         super().__init__(color, position)
         self.color.the_King = self
-    def move_eval(self, dest_position):
+    def move_eval(self, dest_position, turn_aware = True):
         def is_castling_K():
             if oy == dy and dx - ox == 2 and self.color.the_King.has_moved == False and self.color.the_Rook_K.has_moved == False:
                 return True

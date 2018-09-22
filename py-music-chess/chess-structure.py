@@ -1,10 +1,12 @@
 class Game():
     def is_legal():
+        if is_square_pinned(self, piece):
+            return False
         if is_pseudo_legal():
-            if king_is_in_check == False:
+            if is_king_capturable() == False:
                 return True
-            else return False
-        else return False
+            else return [False, "King would remain in check"]
+        else return [False, "Not a legal move"]
 
     def move_attempt():
         if is_legal() = True:
