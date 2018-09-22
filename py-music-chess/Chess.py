@@ -683,12 +683,6 @@ class Game():
 
     def is_king_capturable(self, def_player): #substitute this with is_capturable in the piece class
         return def_player.the_King.is_capturable()
-        ## destination = def_player.the_King.position
-        ## off_player = def_player.the_other_player()
-        ## for piece in off_player.list_of_pieces:
-        ##     if piece.move_eval(destination, False)[0] == True:
-        ##         return True
-        ## return False
 
 
 
