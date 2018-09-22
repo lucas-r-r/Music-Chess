@@ -756,8 +756,6 @@ class Game():
                     return [False]
 
 
-                    #origin_piece.do_move(destination, None)
-
 
 
 
