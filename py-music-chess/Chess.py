@@ -695,11 +695,11 @@ class Game():
             y = abs(y-7)
         return y
 
-    def get_opponent(self, color):
-        if color == self.white:
-            return self.black
-        elif color == self.black:
-            return self.white
+    # this function is useless, I think it's not used. ERASE! def get_opponent(self, color):
+    #    if color == self.white:
+    #        return self.black
+    #    elif color == self.black:
+    #        return self.white
 
     def get_castling_string(self):
         the_string = ""
