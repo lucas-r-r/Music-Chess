@@ -129,7 +129,9 @@ class Piece():
         print("Piece type or its move is not defined, so there's no possible move.")
         print("We'll asume your move is legal")
         return [True, None]
-    def do_move(self, dest_position, special):
+    def is_capturable(self):
+        pass
+    def do_move(self, dest_position, special): #pass this to Game()
         destination_piece = a_game.chessboard[dest_position[0]][dest_position[1]].get_piece()
         if destination_piece != None:
             a_game.capture(dest_position)
@@ -230,7 +232,7 @@ class Queen(Piece):
     symbol = '♕'
     letter = 'Q'
     value = 9
-    def move_eval(self, dest_position):
+    def move_eval(self, dest_position, turn_aware = True):
         if Rook.move_eval(self, dest_position)[0] == True:
             print("Queen moved horizontally")
             return [True, None]
@@ -252,10 +254,10 @@ class Rook(Piece):
             self.color.the_Rook_Q = self
         elif self.position[0] == 7:
             self.color.the_Rook_K = self
-    def move_eval(self, dest_position):
+    def move_eval(self, dest_position, turn_aware = True):
         def are_pieces_on_the_way():
             if abs(delta) == 1:
-                print("Rook is only moving by one square")
+                vprint("Rook is only moving by one square")
                 return False
             if delta < 0:
                 orientation = -1
@@ -282,7 +284,7 @@ class Rook(Piece):
         dx = dest_position[0]
         dy = dest_position[1]
         dest_piece = a_game.chessboard[dx][dy].get_piece()
-        print(f"Evaluationg a {self.color. name} {self.name}")
+        print(f"Evaluating a {self.color. name} {self.name}")
         if ox != dx and oy != dy:
             print_illegal_move("Rooks can only move horizontally or vertically")
             return [False]
@@ -313,7 +315,7 @@ class Bishop(Piece):
     letter = 'B'
     value = 3
 
-    def move_eval(self, dest_position):
+    def move_eval(self, dest_position, turn_aware = True):
         def are_pieces_on_the_way():
             delta = abs(dx - ox)
 
@@ -363,7 +365,7 @@ class Knight(Piece):
     letter = 'N'
     value = 3
 
-    def move_eval(self, dest_position):
+    def move_eval(self, dest_position, turn_aware = True):
         ox = self.position[0]
         oy = self.position[1]
         dx = dest_position[0]
@@ -389,7 +391,7 @@ class Pawn(Piece):
         super().__init__(color, position)
         self.x = 1 #???? Try to erase this and see if it breaks!
         self.has_moved = False
-    def move_eval(self, dest_position):
+    def move_eval(self, dest_position, turn_aware = True):
         #set variable names more usable
         ox = self.position[0]
         oy = self.position[1]
@@ -672,9 +674,19 @@ class Game():
         print(f"Piece to be captured is in {position}")
         self.chessboard[position[0]][position[1]].get_piece().position = [-1, -1]
 
+    def is_king_capturable(self, def_player):
+        destination = def_player.the_King.position
+        off_player = def_player.the_other_player()
+        for piece in off_player.list_of_pieces:
+            if piece.move_eval(destination, False)[0] == True:
+                return True
+        return False
+
+
 
     def is_legal_move(self):
         pass
+
     def get_relative_rank(self, y, color):
         if color == self.white:
             y = abs(y-7)
@@ -700,11 +712,10 @@ class Game():
             return "-"
         return the_string
     def next_turn(self):
-        if self.turn == self.white:
-            self.turn = self.black
-        elif self.turn == self.black:
+
+        if self.turn == self.black:
             self.move += 1
-            self.turn = self.white
+        self.turn = self.turn.the_other_player()
     def move_attempt(self, coordinate_orig_dest):
         """Attempts to make a move. Coordinates are given in the format frfr, where 'f' is the file and 'r' is the rank, and the first two characters refer to the origin square and the last two of them to the destination square"""
         origin = coordinate_to_number(coordinate_orig_dest[:2])
@@ -864,4 +875,5 @@ if __name__ == "__main__":
             sys.exit()
         else:
             a_game.move_attempt(move)
+            print(f"Is {a_game.turn} king capturable? {a_game.is_king_capturable(a_game.turn)}")
             a_game.print_chessboard()
