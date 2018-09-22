@@ -469,15 +469,7 @@ class Square(object):
 
         return None
 
-def assign_piece(piece, position):
-    p = a_game.FEN_to_piece_type[piece]
-    if p[1] == 'w':
-        c = a_game.white
-    elif p[1] == 'b':
-        c = a_game.black
-    else:
-        c = ' '
-    return p[0](c, position)
+
 
 
 
@@ -508,6 +500,15 @@ class Game():
                         'n': [Knight, 'b'],
                         'b': [Bishop, 'b'],
                         'p': [Pawn, 'b']}
+    def assign_piece(self, piece, position):
+        p = self.FEN_to_piece_type[piece]
+        if p[1] == 'w':
+            c = self.white
+        elif p[1] == 'b':
+            c = self.black
+        else:
+            c = ''
+        return p[0](c, position)
 
     def init_game(self, FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"):
         """Initializes the game state, with a standard start as default"""
@@ -539,7 +540,7 @@ class Game():
             y = j // 8
             vprint(f"FEN key to be assigned: {i}")
             if i != '1':
-                assign_piece(i, [x, y])
+                self.assign_piece(i, [x, y])
 
         #Determinar xaque mate: Legal_Moves =[while still_pieces_to_move for i in checkboard.pieces]
         # if not Legal_Moves: checkmate(current_player)
