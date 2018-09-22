@@ -5,19 +5,7 @@ from copy import deepcopy
 verbose = False
 
 
-FEN_to_piece_type = {'1': ['blank space', 'blank space'],
-                    'K': ['King', 'White'],
-                    'Q': ['Queen', 'White'],
-                    'R': ['Rook', 'White'],
-                    'B': ['Bishop', 'White'],
-                    'N': ['Knight', 'White'],
-                    'P': ['Pawn', 'White'],
-                    'k': ['King', 'Black'],
-                    'q': ['Queen', 'Black'],
-                    'r': ['Rook', 'Black'],
-                    'n': ['Knight', 'Black'],
-                    'b': ['Bishop', 'Black'],
-                    'p': ['Pawn', 'Black']}
+
 
                     #It might be useful to take the shortcut and create the class directly with the dictionary, if that's possible.
 file_to_x = {"a":0, "b":1, "c":2, "d":3, "e":4, "f":5, "g":6, "h":7}
@@ -506,7 +494,19 @@ def assign_piece(piece, position):
 
 
 
-
+FEN_to_piece_type = {'1': ['blank space', 'blank space'],
+                    'K': ['King', 'White'],
+                    'Q': ['Queen', 'White'],
+                    'R': ['Rook', 'White'],
+                    'B': ['Bishop', 'White'],
+                    'N': ['Knight', 'White'],
+                    'P': ['Pawn', 'White'],
+                    'k': ['King', 'Black'],
+                    'q': ['Queen', 'Black'],
+                    'r': ['Rook', 'Black'],
+                    'n': ['Knight', 'Black'],
+                    'b': ['Bishop', 'Black'],
+                    'p': ['Pawn', 'Black']}
 
 class Game():
     def __init__(self):
@@ -548,13 +548,9 @@ class Game():
 
             x = j % 8
             y = j // 8
-            if verbose == True:
-                print(f"FEN key to be assigned: {i}")
-            current_piece = assign_piece(i, [x, y])
-            if current_piece == None:
-                s = 'blank'
-            else:
-                s = current_piece.get_symbol()
+            vprint(f"FEN key to be assigned: {i}")
+            if i != '1':
+                assign_piece(i, [x, y])
 
         #Determinar xaque mate: Legal_Moves =[while still_pieces_to_move for i in checkboard.pieces]
         # if not Legal_Moves: checkmate(current_player)
