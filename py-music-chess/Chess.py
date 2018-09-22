@@ -480,12 +480,14 @@ class Player():
             return False
 
     def the_other_player(self):
-        if self == White:
-            return Black
-        elif self == Black:
-            return White
+        if self == self.game.white:
+            return self.game.black
+        elif self == self.game.black:
+            return self.game.white
         else:
             raise Exception("The player does not exist")
+    def __str__(self):
+        return self.name
 
 
 class Square(object):
@@ -849,8 +851,8 @@ class Game():
 a_game = Game() #Decide wether this is going to be in the module as singleton or not
 
 if __name__ == "__main__":
-    print(White)
-    print(white:the_other_player())
+    print(a_game.white)
+    print(a_game.white.the_other_player())
     a_game.init_game()
     playing = True #This is going to create the loop in a While statement until the user quits
     a_game.print_chessboard()
