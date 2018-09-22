@@ -470,45 +470,21 @@ class Square(object):
         return None
 
 def assign_piece(piece, position):
-    p = FEN_to_piece_type[piece]
-    if p[1] == 'White':
+    p = a_game.FEN_to_piece_type[piece]
+    if p[1] == 'w':
         c = a_game.white
-    elif p[1] == 'Black':
+    elif p[1] == 'b':
         c = a_game.black
     else:
-        c = ''
-    if p[0] == 'Queen':
-        return Queen(c, position)
-    elif p[0] == 'King':
-        return King(c, position)
-    elif p[0] == 'Rook':
-        return Rook(c, position)
-    elif p[0] == 'Bishop':
-        return Bishop(c, position)
-    elif p[0] == 'Knight':
-        return Knight(c, position)
-    elif p[0] == 'Pawn':
-        return Pawn(c, position)
-    else:
-        return None
+        c = ' '
+    return p[0](c, position)
 
 
 
-FEN_to_piece_type = {'1': ['blank space', 'blank space'],
-                    'K': ['King', 'White'],
-                    'Q': ['Queen', 'White'],
-                    'R': ['Rook', 'White'],
-                    'B': ['Bishop', 'White'],
-                    'N': ['Knight', 'White'],
-                    'P': ['Pawn', 'White'],
-                    'k': ['King', 'Black'],
-                    'q': ['Queen', 'Black'],
-                    'r': ['Rook', 'Black'],
-                    'n': ['Knight', 'Black'],
-                    'b': ['Bishop', 'Black'],
-                    'p': ['Pawn', 'Black']}
+
 
 class Game():
+
     def __init__(self):
         #Create players
         self.white = Player('white', 0, self)
@@ -519,6 +495,19 @@ class Game():
         self.chessboard = [[Square([i, j]) for j in range(8)] for i in range(8)] #rever como se fan os putos geradores!!!
         self.en_passant = None
         self.promotion_choice = 0
+    FEN_to_piece_type = {'1': ['blank space', 'blank space'],
+                        'K': [King, 'w'],
+                        'Q': [Queen, 'w'],
+                        'R': [Rook, 'w'],
+                        'B': [Bishop, 'w'],
+                        'N': [Knight, 'w'],
+                        'P': [Pawn, 'w'],
+                        'k': [King, 'b'],
+                        'q': [Queen, 'b'],
+                        'r': [Rook, 'b'],
+                        'n': [Knight, 'b'],
+                        'b': [Bishop, 'b'],
+                        'p': [Pawn, 'b']}
 
     def init_game(self, FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"):
         """Initializes the game state, with a standard start as default"""
