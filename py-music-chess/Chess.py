@@ -139,48 +139,6 @@ class Piece():
                 return True
         return False
         pass
-    def do_move(self, dest_position, special): #pass this to Game()
-        destination_piece = a_game.chessboard[dest_position[0]][dest_position[1]].get_piece()
-        if destination_piece != None:
-            a_game.capture(dest_position)
-        if special[0] == "en passant":
-            a_game.en_passant = special[1]
-        else:
-            if special[0] == "capture en passant":
-                if a_game.en_passant[1] == 2:
-                    print("capturing en passant a black pawn")
-                    a_game.capture([dest_position[0],3])
-                elif a_game.en_passant[1] == 6:
-                    print("capturing en passant a white pawn")
-                    a_game.capture([dest_position[0],4])
-                else:
-                    raise Exception("There's no valid en passant 'y' coordinate stored in memory")
-            elif special[0] == "Castling kingside":
-                rook_position = self.color.the_Rook_K.position
-                self.color.the_Rook_K.position = [rook_position[0]-2, rook_position[1]]
-            elif special[0] == "Castling queenside":
-                rook_position = self.color.the_Rook_Q.position
-                self.color.the_Rook_Q.position = [rook_position[0]+3, rook_position[1]]
-            elif special[0] == "Promotion":
-                if a_game.promotion_choice == 0:
-                    Piece.list_of_pieces[self.index] = Queen(self.color, dest_position)
-                elif a_game.promotion_choice == 1:
-                    Piece.list_of_pieces[self.index] = Rook(self.color, dest_position)
-                elif a_game.promotion_choice == 2:
-                    Piece.list_of_pieces[self.index] = Bishop(self.color, dest_position)
-                elif a_game.promotion_choice == 3:
-                    Piece.list_of_pieces[self.index] = Knight(self.color, dest_position)
-
-            print("Erasing en passant information")
-            a_game.en_passant = None
-        # if a_game.chessboard[dest_position[0]][dest_position[1]].get_piece():
-        #     self.capture(dest_position)
-
-        self.position = dest_position
-        self.has_moved = True
-        self.move_count += 1
-        a_game.next_turn()
-        print(f"{self.color.name} {self.name} moved. Turn for {a_game.turn}.")
     def get_square(self):
         #Uses a function to get the square of an specific piece.
         return a_game.chessboard[self.position[0]][self.position[1]]
@@ -749,7 +707,7 @@ class Game():
                 pseudo_evaluation = origin_piece.move_eval(destination)
                 if pseudo_evaluation[0] == True:  #pseudo-legal move
                     special = pseudo_evaluation[1:]
-                    Piece.do_move(origin_piece, destination, special)
+                    self.do_move(origin_piece, destination, special)
 
                     return [True, origin_piece]
                 else:
@@ -781,6 +739,50 @@ class Game():
             return None
 
         print(result)
+
+    def do_move(self, origin_piece, dest_position, special): #pass this to Game()
+        destination_piece = self.chessboard[dest_position[0]][dest_position[1]].get_piece()
+        if destination_piece != None:
+            self.capture(dest_position)
+        if special[0] == "en passant":
+            self.en_passant = special[1]
+        else:
+            if special[0] == "capture en passant":
+                if self.en_passant[1] == 2:
+                    print("capturing en passant a black pawn")
+                    self.capture([dest_position[0],3])
+                elif self.en_passant[1] == 6:
+                    print("capturing en passant a white pawn")
+                    self.capture([dest_position[0],4])
+                else:
+                    raise Exception("There's no valid en passant 'y' coordinate stored in memory")
+            elif special[0] == "Castling kingside":
+                rook_position = origin_piece.color.the_Rook_K.position
+                origin_piece.color.the_Rook_K.position = [rook_position[0]-2, rook_position[1]]
+            elif special[0] == "Castling queenside":
+                rook_position = origin_piece.color.the_Rook_Q.position
+                origin_piece.color.the_Rook_Q.position = [rook_position[0]+3, rook_position[1]]
+            elif special[0] == "Promotion":
+                if self.promotion_choice == 0:
+                    Piece.list_of_pieces[self.index] = Queen(self.color, dest_position)
+                elif self.promotion_choice == 1:
+                    Piece.list_of_pieces[self.index] = Rook(self.color, dest_position)
+                elif self.promotion_choice == 2:
+                    Piece.list_of_pieces[self.index] = Bishop(self.color, dest_position)
+                elif self.promotion_choice == 3:
+                    Piece.list_of_pieces[self.index] = Knight(self.color, dest_position)
+
+            print("Erasing en passant information")
+            self.en_passant = None
+        # if a_game.chessboard[dest_position[0]][dest_position[1]].get_piece():
+        #     self.capture(dest_position)
+
+        origin_piece.position = dest_position
+        origin_piece.has_moved = True
+        origin_piece.move_count += 1
+        self.next_turn()
+        print(f"{origin_piece.color.name} {origin_piece.name} moved. Turn for {self.turn}.")
+
     def game_state_to_FEN(self):
         FEN = ""
         for j in range (8):
