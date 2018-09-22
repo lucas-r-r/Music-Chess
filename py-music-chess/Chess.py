@@ -1,5 +1,6 @@
 import sys
 from common import vprint
+from copy import deepcopy
 
 verbose = False
 
@@ -720,12 +721,14 @@ class Game():
         self.turn = self.turn.the_other_player()
     def move_attempt(self, coordinate_orig_dest):
         """Attempts to make a move. Coordinates are given in the format frfr, where 'f' is the file and 'r' is the rank, and the first two characters refer to the origin square and the last two of them to the destination square"""
+        print("Deep copy a lo loco")
+        buffer_game = deepcopy(self)
         origin = coordinate_to_number(coordinate_orig_dest[:2])
         print (f"Origin coordinate: {origin}")
         destination = coordinate_to_number(coordinate_orig_dest[2:])
         #destination.append(None)
-        if verbose == True:
-            print (f"Destination coordinate: {destination}")
+
+        vprint(f"Destination coordinate: {destination}")
         if origin == destination:
             print("Origin and destination are the same")
             return [False]
