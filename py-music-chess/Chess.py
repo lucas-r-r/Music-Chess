@@ -487,28 +487,23 @@ class Game():
         self.chessboard = [[Square([i, j]) for j in range(8)] for i in range(8)] #rever como se fan os putos geradores!!!
         self.en_passant = None
         self.promotion_choice = 0
-    FEN_to_piece_type = {'1': ['blank space', 'blank space'],
-                        'K': [King, 'w'],
-                        'Q': [Queen, 'w'],
-                        'R': [Rook, 'w'],
-                        'B': [Bishop, 'w'],
-                        'N': [Knight, 'w'],
-                        'P': [Pawn, 'w'],
-                        'k': [King, 'b'],
-                        'q': [Queen, 'b'],
-                        'r': [Rook, 'b'],
-                        'n': [Knight, 'b'],
-                        'b': [Bishop, 'b'],
-                        'p': [Pawn, 'b']}
+
     def assign_piece(self, piece, position):
-        p = self.FEN_to_piece_type[piece]
-        if p[1] == 'w':
-            c = self.white
-        elif p[1] == 'b':
-            c = self.black
-        else:
-            c = ''
-        return p[0](c, position)
+        FEN_to_piece_type = {'1': ['blank space', 'blank space'],
+                            'K': [King, self.white],
+                            'Q': [Queen, self.white],
+                            'R': [Rook, self.white],
+                            'B': [Bishop, self.white],
+                            'N': [Knight, self.white],
+                            'P': [Pawn, self.white],
+                            'k': [King, self.black],
+                            'q': [Queen, self.black],
+                            'r': [Rook, self.black],
+                            'n': [Knight, self.black],
+                            'b': [Bishop, self.black],
+                            'p': [Pawn, self.black]}
+        p = FEN_to_piece_type[piece]
+        return p[0](p[1], position)
 
     def init_game(self, FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"):
         """Initializes the game state, with a standard start as default"""
