@@ -463,13 +463,27 @@ class Square(object):
         return None
 
 class Move():
-    status = [ATTEMPT, PSEDOLEGAL, LEGAL, DONE] = ["a", "p", "l", "d"]
+    status = [ATTEMPT, PSEDOLEGAL, LEGAL, DONE, ILLEGAL, NO_PIECE] = ["a", "p", "l", "d", "i", "o"]
     def __init__(self, game, origin, destination, promotion = None, status = None):
         self.game = game
         self.origin = origin
         self.destination = destination
         self.promotion = promotion
         self.status = None
+        try:
+            self.origin_piece = game.chessboard[origin[0]][origin[1]].get_piece()
+        except:
+            self.origin_piece = None
+    def is_valid_piece_to_move(self):
+        if self.origin_piece == None:
+            print("there's no piece in that position")
+            return [False]
+        elif origin_piece.color != self.turn:
+            print(f"it's {self.turn.name} to move!")
+            return [False]
+    def move_eval(self):
+        return self.origin_piece.move_eval()
+
 
 
 
@@ -502,22 +516,23 @@ class Game():
         self.en_passant = None
         self.promotion_choice = 0
         self.list_of_board_status = []
+        self.FEN_to_piece_type = {'1': ['blank space', 'blank space'],
+                                  'K': [King, self.white],
+                                  'Q': [Queen, self.white],
+                                  'R': [Rook, self.white],
+                                  'B': [Bishop, self.white],
+                                  'N': [Knight, self.white],
+                                  'P': [Pawn, self.white],
+                                  'k': [King, self.black],
+                                  'q': [Queen, self.black],
+                                  'r': [Rook, self.black],
+                                  'n': [Knight, self.black],
+                                  'b': [Bishop, self.black],
+                                  'p': [Pawn, self.black]}
 
     def assign_piece(self, piece, position):
-        FEN_to_piece_type = {'1': ['blank space', 'blank space'],
-                            'K': [King, self.white],
-                            'Q': [Queen, self.white],
-                            'R': [Rook, self.white],
-                            'B': [Bishop, self.white],
-                            'N': [Knight, self.white],
-                            'P': [Pawn, self.white],
-                            'k': [King, self.black],
-                            'q': [Queen, self.black],
-                            'r': [Rook, self.black],
-                            'n': [Knight, self.black],
-                            'b': [Bishop, self.black],
-                            'p': [Pawn, self.black]}
-        p = FEN_to_piece_type[piece]
+
+        p = self.FEN_to_piece_type[piece]
         return p[0](p[1], position, self)
 
     def init_game(self, FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"):
