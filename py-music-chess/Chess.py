@@ -440,13 +440,14 @@ class Player():
 
 class Square(object):
     def __init__(self, position):
+        scolors = [DARK, LIGHT] = ["*", "·"]
         self.position = position
-        #substitute this with get_piece()
+        #Piece could have a method to update the Piece() and the Square() classes in sync.
         self.piece = None
         if (position[0] + position[1]) % 2 == 1:
-            self.scolor = "D"
+            self.scolor = DARK
         else:
-            self.scolor = "L"
+            self.scolor = LIGHT
 
 
     def get_piece(self):
@@ -612,7 +613,7 @@ class Game():
                 if piece != None:
                     char = piece.get_symbol()
                 else:
-                    char = "□"
+                    char = self.chessboard[x][y].scolor
                 rowstr += char
                 rowstr += " "
 
