@@ -463,13 +463,15 @@ class Square(object):
         return None
 
 class Move():
-    def __init__(self, game, origin, destination, promotion = None):
+    status = [ATTEMPT, PSEDOLEGAL, LEGAL, DONE] = ["a", "p", "l", "d"]
+    def __init__(self, game, origin, destination, promotion = None, status = None):
         self.game = game
         self.origin = origin
         self.destination = destination
         self.promotion = promotion
         self.status = None
-        
+
+
 
 class BoardStatus:
     def __init__(self, game, turn, move, half_move, en_passant = None):
@@ -678,15 +680,15 @@ class Game():
         if self.is_legal_move():
             pass
         origin = coordinate_to_number(coordinate_orig_dest[:2])
-        print (f"Origin coordinate: {origin}")
+        vprint (f"Origin coordinate: {origin}")
         destination = coordinate_to_number(coordinate_orig_dest[2:])
         #destination.append(None)
-
         vprint(f"Destination coordinate: {destination}")
         if origin == destination:
             print("Origin and destination are the same")
             return [False]
         else: #Proceed to evaluate whether there is a piece, and whether that piece is of color of current turn.
+            move = Move(self, origin, destination, None, "a") #Doesn't work yet
             origin_piece = self.chessboard[origin[0]][origin[1]].get_piece()
 
             if origin_piece == None:
