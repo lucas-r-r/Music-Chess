@@ -470,10 +470,8 @@ class Move():
         self.destination = destination
         self.promotion = promotion
         self.status = None
-        try:
-            self.origin_piece = game.chessboard[origin[0]][origin[1]].get_piece()
-        except:
-            self.origin_piece = None
+        self.origin_piece = game.chessboard[origin[0]][origin[1]].get_piece()
+
     def is_valid_piece_to_move(self):
         if self.origin_piece == None:
             print("there's no piece in that position")
@@ -510,12 +508,11 @@ class Game():
         self.white = Player('white', 0, self)
         self.black = Player('black', 6, self)
         self.turn = self.white
-        self.half_move = 0
-        self.move = 1
         self.chessboard = [[Square([i, j]) for j in range(8)] for i in range(8)]
-        self.en_passant = None
-        self.promotion_choice = 0
+        #almost all of this can be into a game state
+
         self.list_of_board_status = []
+        self.promotion_choice = 0
         self.FEN_to_piece_type = {'1': ['blank space', 'blank space'],
                                   'K': [King, self.white],
                                   'Q': [Queen, self.white],
@@ -531,7 +528,6 @@ class Game():
                                   'p': [Pawn, self.black]}
 
     def assign_piece(self, piece, position):
-
         p = self.FEN_to_piece_type[piece]
         return p[0](p[1], position, self)
 
@@ -540,14 +536,15 @@ class Game():
         self.list_of_pieces = []
         self.white.list_of_pieces = []
         self.black.list_of_pieces = []
-        self.move = 1 #still need to get it from FEN
         self.half_move = 1
+        self.move = 1 #still need to get it from FEN
+        self.en_passant = None
+
         if open_FEN_file():
             pass
-        print('Input FEN:', FEN)
+        vprint(f'Input FEN: {FEN}')
         #slice part of coordinates
-        if verbose == True:
-            print('Extracting FEN coordinates...')
+        vprint('Extracting FEN coordinates...')
         turn_division = FEN.index(' ')
 
         #process the coordinates part
@@ -599,24 +596,17 @@ class Game():
         if FEN_castling_status == '-':
             pass
         else:
+            castlingkeys = {"K": (self.white.the_King, self.white.the_Rook_K),
+                            "Q": (self.white.the_King, self.white.the_Rook_Q),
+                            "k": (self.black.the_King, self.black.the_Rook_K),
+                            "q": (self.black.the_King, self.black.the_Rook_Q)}
             for i in FEN_castling_status:
-                if i =="K":
-                    self.white.the_King.has_moved = False
-                    self.white.the_Rook_K.has_moved = False
-                elif i =="Q":
-                    self.white.the_King.has_moved = False
-                    self.white.the_Rook_Q.has_moved = False
-                elif i =="k":
-                    self.black.the_King.has_moved = False
-                    self.black.the_Rook_K.has_moved = False
-                elif i =="q":
-                    self.black.the_King.has_moved = False
-                    self.black.the_Rook_Q.has_moved = False
-                else:
-
-                    raise Exception("Not a valid character in castling status")
+                if i not in castlingkeys.keys():
+                    raise Exception("Not a valid castling key")
+                castlingkeys[i][0].has_moved, castlingkeys[i][1].has_moved = False, False
         print(self.game_state_to_FEN())
         self.list_of_board_status.append(BoardStatus(self, self.turn, self.move, self.half_move, self.en_passant))
+
 
     def list_all_pieces(self):
         """Getting all the pieces in board"""
@@ -658,8 +648,7 @@ class Game():
 
 
     def is_legal_move(self):
-        print("Deep copy a lo loco")
-        buffer_game = deepcopy(self)
+        pass
 
     def get_relative_rank(self, y, color):
         if color == self.white:
@@ -703,7 +692,7 @@ class Game():
             print("Origin and destination are the same")
             return [False]
         else: #Proceed to evaluate whether there is a piece, and whether that piece is of color of current turn.
-            move = Move(self, origin, destination, None, "a") #Doesn't work yet
+            move = Move(self, origin, destination, None, Move.ATTEMPT) #Doesn't work yet
             origin_piece = self.chessboard[origin[0]][origin[1]].get_piece()
 
             if origin_piece == None:
