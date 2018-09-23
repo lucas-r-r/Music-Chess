@@ -462,6 +462,14 @@ class Square(object):
 
         return None
 
+class Move():
+    def __init__(self, game, origin, destination, promotion = None):
+        self.game = game
+        self.origin = origin
+        self.destination = destination
+        self.promotion = promotion
+        self.status = None
+        
 
 class BoardStatus:
     def __init__(self, game, turn, move, half_move, en_passant = None):
@@ -705,6 +713,8 @@ class Game():
 
 
 
+    def move_push():
+        pass
     def is_valid_piece_to_move(self, square_coord):
         piece = self.get_piece_from_coord(square_coord)
         if piece != None:
