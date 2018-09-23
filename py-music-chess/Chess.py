@@ -516,6 +516,7 @@ class Game():
         self.white.list_of_pieces = []
         self.black.list_of_pieces = []
         self.move = 1 #still need to get it from FEN
+        self.half_move = 1
         if open_FEN_file():
             pass
         print('Input FEN:', FEN)
