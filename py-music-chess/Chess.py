@@ -76,17 +76,7 @@ class Piece():
         print(f"Piece index is {self.index}")
         print(f"Piece index in color {self.color.name} is {self.color_index}")
 
-    def get_alive_pieces(color = "both"):
-        alive_pieces = []
-        if color == "both":
-            for piece in a_game.list_of_pieces:
-                if piece.position != [-1, -1]:
-                    alive_pieces.append(piece)
-        else:
-            for piece in self.game.list_of_pieces:
-                if piece.position != [-1, -1] and piece.color == color:
-                    alive_pieces.append(piece)
-        return alive_pieces
+
 
 
 
@@ -461,7 +451,7 @@ class Square(object):
 
     def get_piece(self):
         #obtains the corresponding piece in the square, or returns "None" if none is present.
-        for piece in Piece.get_alive_pieces():
+        for piece in a_game.get_alive_pieces():
             #print(f"Position of piece, {piece.position}. Position of square: {self.position}")
             if piece.position == self.position:
                 #print("found piece. Yay!")
@@ -557,7 +547,7 @@ class Game():
 
         #Getting and printing all the current pieces in board.
 
-        pieces_symbols = [piece.get_symbol() for piece in Piece.get_alive_pieces()]
+        pieces_symbols = [piece.get_symbol() for piece in self.get_alive_pieces()]
         print("Pieces on the game: ", " ".join(pieces_symbols))
 
         FEN_remaining = str.strip(FEN[turn_division:])
@@ -843,6 +833,18 @@ class Game():
                     if piece.name == piece_type and piece.color == color:
                         positions_list.append([x, y])
         return positions_list
+
+    def get_alive_pieces(self, color = "both"):
+        alive_pieces = []
+        if color == "both":
+            for piece in self.list_of_pieces:
+                if piece.position != [-1, -1]:
+                    alive_pieces.append(piece)
+        else:
+            for piece in self.list_of_pieces:
+                if piece.position != [-1, -1] and piece.color == color:
+                    alive_pieces.append(piece)
+        return alive_pieces
     def get_total_value(self, color = "both"):
         alive_pieces = Piece.get_alive_pieces(color)
         value = 0
