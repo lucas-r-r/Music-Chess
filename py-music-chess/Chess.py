@@ -1,5 +1,6 @@
 import sys
 from common import vprint
+from copy import copy
 from copy import deepcopy
 
 verbose = False
@@ -61,14 +62,15 @@ def open_FEN_file():
 
 class Piece():
     list_of_pieces = []
-    def __init__(self, color, position):
+    def __init__(self, color, position, game):
+        self.game = game
         self.color = color
         #self.piece_type = piece_type
         self.has_moved = False
         self.move_count = 0
         self.position = position
-        self.index = len(Piece.list_of_pieces)
-        Piece.list_of_pieces.append(self)
+        self.index = len(game.list_of_pieces)
+        game.list_of_pieces.append(self)
         self.color_index = len(self.color.list_of_pieces)
         self.color.list_of_pieces.append(self)
         print(f"Piece index is {self.index}")
@@ -77,11 +79,11 @@ class Piece():
     def get_alive_pieces(color = "both"):
         alive_pieces = []
         if color == "both":
-            for piece in Piece.list_of_pieces:
+            for piece in a_game.list_of_pieces:
                 if piece.position != [-1, -1]:
                     alive_pieces.append(piece)
         else:
-            for piece in Piece.list_of_pieces:
+            for piece in self.game.list_of_pieces:
                 if piece.position != [-1, -1] and piece.color == color:
                     alive_pieces.append(piece)
         return alive_pieces
@@ -145,8 +147,8 @@ class King(Piece):
     symbol = '♔'
     letter = "K"
     value = 0
-    def __init__(self, color, position):
-        super().__init__(color, position)
+    def __init__(self, color, position, game):
+        super().__init__(color, position, game)
         self.color.the_King = self
     def move_eval(self, dest_position, turn_aware = True):
         def is_castling_K():
@@ -201,9 +203,9 @@ class Rook(Piece):
     symbol = '♖'
     letter = 'R'
     value = 5
-    def __init__(self, color, position):
+    def __init__(self, color, position, game):
 
-        super().__init__(color, position)
+        super().__init__(color, position, game)
         if self.position[0] == 0:
             self.color.the_Rook_Q = self
         elif self.position[0] == 7:
@@ -341,8 +343,8 @@ class Pawn(Piece):
     letter = 'P'
     value = 1
     #Need to rename this to uppercase, to match conventions.
-    def __init__(self, color, position):
-        super().__init__(color, position)
+    def __init__(self, color, position, game):
+        super().__init__(color, position, game)
         self.x = 1 #???? Try to erase this and see if it breaks!
         self.has_moved = False
     def move_eval(self, dest_position, turn_aware = True):
@@ -470,6 +472,17 @@ class Square(object):
         return None
 
 
+class BoardStatus:
+    def __init__(self, game, turn, move, half_move, en_passant = None):
+        #save pieces position
+        self.game = game
+        self.list_of_pieces = []
+        self.turn = turn
+        self.half_move = half_move
+        self.move = move
+        self.en_passant = en_passant
+        for piece in game.list_of_pieces:
+            self.list_of_pieces.append(copy(piece))
 
 
 
@@ -484,9 +497,10 @@ class Game():
         self.turn = self.white
         self.half_move = 0
         self.move = 1
-        self.chessboard = [[Square([i, j]) for j in range(8)] for i in range(8)] #rever como se fan os putos geradores!!!
+        self.chessboard = [[Square([i, j]) for j in range(8)] for i in range(8)]
         self.en_passant = None
         self.promotion_choice = 0
+        self.list_of_board_status = []
 
     def assign_piece(self, piece, position):
         FEN_to_piece_type = {'1': ['blank space', 'blank space'],
@@ -503,11 +517,11 @@ class Game():
                             'b': [Bishop, self.black],
                             'p': [Pawn, self.black]}
         p = FEN_to_piece_type[piece]
-        return p[0](p[1], position)
+        return p[0](p[1], position, self)
 
     def init_game(self, FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"):
         """Initializes the game state, with a standard start as default"""
-        Piece.list_of_pieces = []
+        self.list_of_pieces = []
         self.white.list_of_pieces = []
         self.black.list_of_pieces = []
         self.move = 1 #still need to get it from FEN
@@ -585,6 +599,7 @@ class Game():
 
                     raise Exception("Not a valid character in castling status")
         print(self.game_state_to_FEN())
+        self.list_of_board_status.append(BoardStatus(self, self.turn, self.move, self.half_move, self.en_passant))
 
     def list_all_pieces(self):
         """Getting all the pieces in board"""
@@ -615,7 +630,6 @@ class Game():
         print("  a b c d e f g h")
 
 
-
     def capture(self, position):
         """Eliminates piece in destination"""
         print(f"Piece to be captured is in {position}")
@@ -627,7 +641,8 @@ class Game():
 
 
     def is_legal_move(self):
-        pass
+        print("Deep copy a lo loco")
+        buffer_game = deepcopy(self)
 
     def get_relative_rank(self, y, color):
         if color == self.white:
@@ -660,8 +675,8 @@ class Game():
         self.turn = self.turn.the_other_player()
     def move_attempt(self, coordinate_orig_dest):
         """Attempts to make a move. Coordinates are given in the format frfr, where 'f' is the file and 'r' is the rank, and the first two characters refer to the origin square and the last two of them to the destination square"""
-        print("Deep copy a lo loco")
-        buffer_game = deepcopy(self)
+        if self.is_legal_move():
+            pass
         origin = coordinate_to_number(coordinate_orig_dest[:2])
         print (f"Origin coordinate: {origin}")
         destination = coordinate_to_number(coordinate_orig_dest[2:])
@@ -745,13 +760,13 @@ class Game():
                 origin_piece.color.the_Rook_Q.position = [rook_position[0]+3, rook_position[1]]
             elif special[0] == "Promotion":
                 if self.promotion_choice == 0:
-                    Piece.list_of_pieces[self.index] = Queen(self.color, dest_position)
+                    self.list_of_pieces[self.index] = Queen(self.color, dest_position)
                 elif self.promotion_choice == 1:
-                    Piece.list_of_pieces[self.index] = Rook(self.color, dest_position)
+                    self.list_of_pieces[self.index] = Rook(self.color, dest_position)
                 elif self.promotion_choice == 2:
-                    Piece.list_of_pieces[self.index] = Bishop(self.color, dest_position)
+                    self.list_of_pieces[self.index] = Bishop(self.color, dest_position)
                 elif self.promotion_choice == 3:
-                    Piece.list_of_pieces[self.index] = Knight(self.color, dest_position)
+                    self.list_of_pieces[self.index] = Knight(self.color, dest_position)
 
             print("Erasing en passant information")
             self.en_passant = None
