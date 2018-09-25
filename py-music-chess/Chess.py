@@ -437,6 +437,14 @@ class Player():
     def __str__(self):
         return self.name
 
+    def get_list_of_pieces():
+        list_of_pieces=[]
+        for piece in self.game.list_of_pieces:
+            if piece.color = self:
+                list_of_pieces.append(piece)
+        return list_of_pieces
+
+
 
 class Square(object):
     def __init__(self, position):
